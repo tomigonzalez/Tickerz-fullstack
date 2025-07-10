@@ -6,14 +6,16 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import mongoose from 'mongoose';
 import routes from './routes/userRouter';
-
+import eventRoutes from './routes/eventRoutes';
+import orderRouter from './routes/orderRouter';
+import mpRouter from './routes/mpRouter';
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
 
-app.use('/api', routes);
+app.use('/api', routes,eventRoutes,orderRouter,mpRouter);
 
 // Conexión a MongoDB y arranque del servidor
 mongoose.connect(process.env.MONGODB_URI!)

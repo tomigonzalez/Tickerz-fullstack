@@ -18,10 +18,6 @@ routerUsuario.post('/logout', logoutUser);
 // routes/routes.ts
 routerUsuario.post('/refresh-token', refreshToken);
 
-//ROUTES AGENDA
-
-
-//ROUTES RESERVA
 
 export default routerUsuario;
 

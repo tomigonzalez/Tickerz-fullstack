@@ -3,8 +3,9 @@ import { Request, Response } from "express";
 import { Preference as PreferenceClient } from "mercadopago/dist/clients/preference";
 import type { PreferenceRequest } from "mercadopago/dist/clients/preference/commonTypes";
 
-import mpClient from "../config/mercadopago";
+
 import Orders from "../models/Orders";
+import mpClient from "../config/mercadoPago";
 
 export const createPaymentPreference = async (req: Request, res: Response) => {
   const { orderId } = req.params;
@@ -12,7 +13,7 @@ export const createPaymentPreference = async (req: Request, res: Response) => {
   try {
     const order = await Orders.findById(orderId);
     if (!order) {
-      return res.status(404).json({ message: "Orden no encontrada." });
+     res.status(404).json({ message: "Orden no encontrada." }); return ;
     }
 
     const preferenceData: PreferenceRequest = {
