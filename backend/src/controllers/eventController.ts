@@ -77,6 +77,42 @@ export const getMyEvents = async (req: Request, res: Response) => {
   }
 };
 
+export const updateEvent = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = (req as any).user.id;
+
+  try {
+    const event = await Event.findById(id);
+    if (!event)  {res.status(404).json({ message: "Evento no encontrado." }); 
+    return ;
+  }
+    if (event.organizerId.toString() !== userId)
+     { res.status(403).json({ message: "No autorizado." }); return ;}
+
+    await Event.findByIdAndUpdate(id, req.body, { new: true });
+    res.json({ message: "Evento actualizado." });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error al actualizar evento." });
+  }
+};
+export const deleteEvent = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const userId = (req as any).user.id;
+
+  try {
+    const event = await Event.findById(id);
+    if (!event) { res.status(404).json({ message: "Evento no encontrado." });return;}
+
+    if (event.organizerId.toString() !== userId)
+    {  res.status(403).json({ message: "No autorizado." });return;}
+    await Event.findByIdAndDelete(id);
+    res.json({ message: "Evento eliminado correctamente." });
+
+  } catch (error) {
+    res.status(500).json({ message: "Error al eliminar evento." });
+  }
+};
 export const getEventBySlug = async (req: Request, res: Response) => {
   const { slug } = req.params;
 
