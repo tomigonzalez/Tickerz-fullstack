@@ -76,3 +76,28 @@ export const getMyEvents = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error interno del servidor." });
   }
 };
+
+export const getEventBySlug = async (req: Request, res: Response) => {
+  const { slug } = req.params;
+
+  try {
+    const event = await Event.findOne({ slug });
+
+    if (!event) {
+       res.status(404).json({ message: "Evento no encontrado." }); 
+       return;
+    }
+
+    res.json({
+      title: event.title,
+      description: event.description,
+      location: event.location,
+      datetime: event.datetime,
+      ticketTypes: event.ticketTypes,
+      slug: event.slug
+    });
+  } catch (error) {
+    console.error("Error al obtener evento por slug:", error);
+    res.status(500).json({ message: "Error interno del servidor." });
+  }
+};
