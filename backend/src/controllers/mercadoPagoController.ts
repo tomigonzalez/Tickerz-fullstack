@@ -15,7 +15,8 @@ export const createPaymentPreference = async (req: Request, res: Response) => {
     if (!order) {
      res.status(404).json({ message: "Orden no encontrada." }); return ;
     }
-
+   
+console.log("Order encontrada:", order);
     const preferenceData: PreferenceRequest = {
       items: [
         {
@@ -31,7 +32,7 @@ export const createPaymentPreference = async (req: Request, res: Response) => {
         email: order.buyerEmail,
       },
       external_reference: order._id?.toString(),
-      notification_url: `${process.env.BASE_URL}/webhooks/mercadopago`,
+      notification_url: `${process.env.FRONT_URL}/api/webhooks/mercadopago`,
       back_urls: {
         success: `${process.env.FRONT_URL}/success?order=${order.code}`,
         failure: `${process.env.FRONT_URL}/failure`,
@@ -39,7 +40,7 @@ export const createPaymentPreference = async (req: Request, res: Response) => {
       },
       auto_return: "approved",
     };
-
+console.log("Datos de la preferencia a enviar a Mercado Pago:", JSON.stringify(preferenceData, null, 2));
     const preferenceClient = new PreferenceClient(mpClient);
     const response = await preferenceClient.create({ body: preferenceData });
 

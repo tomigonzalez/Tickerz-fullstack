@@ -8,7 +8,7 @@ import { Payment } from "mercadopago/dist/clients/payment";
 export const mercadoPagoWebhook = async (req: Request, res: Response) => {
   try {
     const { topic, id } = req.query;
-
+console.log("📩 Webhook recibido", req.method, req.query, req.body);
     if (!topic || !id) {
        res.status(400).json({ message: "Faltan parámetros." }); return ;
     }
@@ -19,8 +19,8 @@ export const mercadoPagoWebhook = async (req: Request, res: Response) => {
 
     const paymentClient = new Payment(mpClient);
   const paymentResponse = await paymentClient.get({ id: Number(id) });
-const payment = paymentResponse as PaymentResponse;
-
+  const payment = paymentResponse as PaymentResponse;
+  
     const orderId = payment.external_reference;
     if (!orderId) {
        res.status(400).json({ message: "No se encontró referencia externa." }); return ;
