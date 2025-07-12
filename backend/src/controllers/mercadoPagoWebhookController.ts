@@ -5,7 +5,17 @@ import type { PaymentResponse } from "mercadopago/dist/clients/payment/commonTyp
 import mpClient from "../config/mercadoPago";
 import { Payment } from "mercadopago/dist/clients/payment";
 
+
+
+
+
 export const mercadoPagoWebhook = async (req: Request, res: Response) => {
+   const secret = req.query.secret || req.headers['x-webhook-secret'];
+
+if (secret !== process.env.MP_WEBHOOK_SECRET) {
+  console.warn('❌ Webhook con secreto inválido');
+   res.status(401).json({ message: 'Unauthorized' }); return;
+}
   try {
     const { topic, id } = req.query;
 console.log("📩 Webhook recibido", req.method, req.query, req.body);
