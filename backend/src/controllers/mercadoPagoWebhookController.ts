@@ -4,18 +4,25 @@ import Orders from "../models/Orders";
 import type { PaymentResponse } from "mercadopago/dist/clients/payment/commonTypes";
 import mpClient from "../config/mercadoPago";
 import { Payment } from "mercadopago/dist/clients/payment";
-
-
+import { sendTicketEmail } from "../services/sendTicketEmail";
 
 
 
 export const mercadoPagoWebhook = async (req: Request, res: Response) => {
-   const secret = req.query.secret || req.headers['x-webhook-secret'];
+//    const secret = req.query.secret || req.headers['x-webhook-secret'];
 
-if (secret !== process.env.MP_WEBHOOK_SECRET) {
-  console.warn('❌ Webhook con secreto inválido');
-   res.status(401).json({ message: 'Unauthorized' }); return;
+// if (secret !== process.env.MP_WEBHOOK_SECRET) {
+//   console.warn('❌ Webhook con secreto inválido');
+//    res.status(401).json({ message: 'Unauthorized' }); return;
+// }
+ if (process.env.NODE_ENV === "production") {
+  const secret = req.query.secret || req.headers['x-webhook-secret'];
+  if (secret !== process.env.MP_WEBHOOK_SECRET) {
+    console.warn('❌ Webhook con secreto inválido');
+     res.status(401).json({ message: 'Unauthorized' });return;
+  }
 }
+
   try {
     const { topic, id } = req.query;
 console.log("📩 Webhook recibido", req.method, req.query, req.body);
@@ -40,10 +47,26 @@ console.log("📩 Webhook recibido", req.method, req.query, req.body);
     if (!order) {
        res.status(404).json({ message: "Orden no encontrada." }); return ;
     }
+  
+    if (order.status === "approved") {
+      console.log("📬 Orden ya aprobada, se ignora para evitar doble envío de email.");
+       res.status(200).json({ message: "Orden ya procesada." });return;
+    }
 
+    
     if (payment.status === "approved") {
       order.status = "approved";
       order.paymentId = payment.id?.toString();
+
+      await sendTicketEmail({
+        to: order.buyerEmail,
+        name: order.buyerName,
+        tickets: order.tickets.map(t => ({
+          code: t.code,
+          type: t.type
+        }))
+      });
+
     } else if (payment.status === "pending") {
       order.status = "pending";
     } else {

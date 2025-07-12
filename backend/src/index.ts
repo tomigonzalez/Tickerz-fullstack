@@ -9,13 +9,14 @@ import routes from './routes/userRouter';
 import eventRoutes from './routes/eventRoutes';
 import orderRouter from './routes/orderRouter';
 import mpRouter from './routes/mpRouter';
+import ticketsRouter from './routes/ticketsRouter';
 
 const app = express();
 app.use(express.json());
 app.use(cookieParser());
 
 
-app.use('/api', routes,eventRoutes,orderRouter,mpRouter);
+app.use('/api', routes,eventRoutes,orderRouter,mpRouter, ticketsRouter);
 
 // Conexión a MongoDB y arranque del servidor
 mongoose.connect(process.env.MONGODB_URI!)

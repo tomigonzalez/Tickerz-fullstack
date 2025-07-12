@@ -1,11 +1,10 @@
 import QRCode from 'qrcode';
 
-export const generateTicketQR = async (text: string): Promise<string> => {
+export const generateTicketQRBuffer = async (text: string): Promise<Buffer> => {
   try {
-    const qr = await QRCode.toDataURL(text);
-    return qr;
+    return await QRCode.toBuffer(text);
   } catch (err) {
-    console.error("Error generando QR:", err);
+    console.error("Error generando el buffer del QR:", err);
     throw err;
   }
 };
