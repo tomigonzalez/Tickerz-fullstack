@@ -58,14 +58,14 @@ console.log("📩 Webhook recibido", req.method, req.query, req.body);
       order.status = "approved";
       order.paymentId = payment.id?.toString();
 
-      await sendTicketEmail({
-        to: order.buyerEmail,
-        name: order.buyerName,
-        tickets: order.tickets.map(t => ({
-          code: t.code,
-          type: t.type
-        }))
-      });
+      // await sendTicketEmail({
+      //   to: order.buyerEmail,
+      //   name: order.buyerName,
+      //   tickets: order.tickets.map(t => ({
+      //     code: t.code,
+      //     type: t.type
+      //   }))
+      // });
 
     } else if (payment.status === "pending") {
       order.status = "pending";

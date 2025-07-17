@@ -8,23 +8,32 @@ export const createEvent = async (req: Request, res: Response) => {
 
   if (!user) {
     res.status(401).json({ message: "No autorizado." });
-     return;
+    return;
   }
 
   const result = createEventSchema.safeParse(req.body);
   if (!result.success) {
-     res.status(400).json({ errors: result.error.flatten().fieldErrors });
-     return;
+    res.status(400).json({ errors: result.error.flatten().fieldErrors });
+    return;
   }
 
-  const { title, description, datetime, location, ticketTypes } = result.data;
+  const {
+    title,
+    description,
+    datetime,
+    location,
+    city,
+    region,
+    googleMapsUrl,
+    imageUrl,
+    ticketTypes
+  } = result.data;
 
   try {
     const baseSlug = slugify(title, { lower: true, strict: true });
     let slug = baseSlug;
     let counter = 1;
 
-    // Asegurar que el slug sea único
     while (await Event.findOne({ slug })) {
       slug = `${baseSlug}-${counter++}`;
     }
@@ -34,6 +43,10 @@ export const createEvent = async (req: Request, res: Response) => {
       description,
       datetime: new Date(datetime),
       location,
+      city,
+      region,
+      googleMapsUrl,
+      imageUrl,
       slug,
       ticketTypes,
       organizerId: user.id
@@ -47,6 +60,12 @@ export const createEvent = async (req: Request, res: Response) => {
         id: savedEvent._id,
         slug: savedEvent.slug,
         title: savedEvent.title,
+        location: savedEvent.location,
+        city: savedEvent.city,
+        region: savedEvent.region,
+        imageUrl: savedEvent.imageUrl,
+        googleMapsUrl: savedEvent.googleMapsUrl,
+        datetime: savedEvent.datetime,
         ticketTypes: savedEvent.ticketTypes
       }
     });
@@ -60,8 +79,8 @@ export const getMyEvents = async (req: Request, res: Response) => {
   const user = (req as any).user;
 
   if (!user) {
-     res.status(401).json({ message: "No autorizado." });
-     return;
+    res.status(401).json({ message: "No autorizado." });
+    return;
   }
 
   try {
@@ -83,11 +102,15 @@ export const updateEvent = async (req: Request, res: Response) => {
 
   try {
     const event = await Event.findById(id);
-    if (!event)  {res.status(404).json({ message: "Evento no encontrado." }); 
-    return ;
-  }
-    if (event.organizerId.toString() !== userId)
-     { res.status(403).json({ message: "No autorizado." }); return ;}
+    if (!event) {
+      res.status(404).json({ message: "Evento no encontrado." });
+      return;
+    }
+
+    if (event.organizerId.toString() !== userId) {
+      res.status(403).json({ message: "No autorizado." });
+      return;
+    }
 
     await Event.findByIdAndUpdate(id, req.body, { new: true });
     res.json({ message: "Evento actualizado." });
@@ -96,16 +119,23 @@ export const updateEvent = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error al actualizar evento." });
   }
 };
+
 export const deleteEvent = async (req: Request, res: Response) => {
   const { id } = req.params;
   const userId = (req as any).user.id;
 
   try {
     const event = await Event.findById(id);
-    if (!event) { res.status(404).json({ message: "Evento no encontrado." });return;}
+    if (!event) {
+      res.status(404).json({ message: "Evento no encontrado." });
+      return;
+    }
 
-    if (event.organizerId.toString() !== userId)
-    {  res.status(403).json({ message: "No autorizado." });return;}
+    if (event.organizerId.toString() !== userId) {
+      res.status(403).json({ message: "No autorizado." });
+      return;
+    }
+
     await Event.findByIdAndDelete(id);
     res.json({ message: "Evento eliminado correctamente." });
 
@@ -113,6 +143,7 @@ export const deleteEvent = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error al eliminar evento." });
   }
 };
+
 export const getEventBySlug = async (req: Request, res: Response) => {
   const { slug } = req.params;
 
@@ -120,14 +151,18 @@ export const getEventBySlug = async (req: Request, res: Response) => {
     const event = await Event.findOne({ slug });
 
     if (!event) {
-       res.status(404).json({ message: "Evento no encontrado." }); 
-       return;
+      res.status(404).json({ message: "Evento no encontrado." });
+      return;
     }
 
     res.json({
       title: event.title,
       description: event.description,
       location: event.location,
+      city: event.city,
+      region: event.region,
+      googleMapsUrl: event.googleMapsUrl,
+      imageUrl: event.imageUrl,
       datetime: event.datetime,
       ticketTypes: event.ticketTypes,
       slug: event.slug

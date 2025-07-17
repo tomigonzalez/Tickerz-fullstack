@@ -13,5 +13,9 @@ export const createEventSchema = z.object({
     message: "Fecha inválida",
   }),
   location: z.string().min(1, "Ubicación requerida"),
+  city: z.string().min(1, "La ciudad es requerida"),
+  region: z.string().min(1, "La provincia o país es requerido"),
+  googleMapsUrl: z.string().url("Debe ser una URL válida").optional(),
+  imageUrl: z.string().url("Debe ser una URL válida").optional(),
   ticketTypes: z.array(ticketTypeSchema).min(1, "Al menos un tipo de entrada")
 });
