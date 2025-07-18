@@ -4,6 +4,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --primaryColor:#E9A319;
+  --secondaryColor:#7C2303;
 }
 
 
@@ -13,6 +14,7 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
    --color-primary: var(--primaryColor);
+   --color-secondary: var(--secondaryColor);
 }
 
 @media (prefers-color-scheme: dark) {
