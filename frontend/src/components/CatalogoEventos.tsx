@@ -19,11 +19,11 @@ const CatalogoEventos = () => {
       el,
       {
         scale: 0.9,
-        y: 150,
+        y: 10,
       },
       {
         scale: 1,
-        y: 0,
+        y: -100,
 
         scrollTrigger: {
           trigger: el,
@@ -31,7 +31,7 @@ const CatalogoEventos = () => {
           end: "top 60%", // termina más abajo = más lento
           scrub: 5, // más delay = animación más dura, lenta
         },
-        duration: 1,
+        duration: 2,
         ease: "power2.out", // easing más suave
       }
     );
@@ -40,9 +40,35 @@ const CatalogoEventos = () => {
   return (
     <div
       ref={sectionRef}
-      className="w-full h-screen rounded-4xl bg-secondary shadow-2xl"
+      className="w-full  min-h-[50vh] rounded-[4rem] bg-secondary shadow-2xl relative"
     >
-      {/* Contenido del catálogo */}
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+
+      <h1>asd</h1>
+      <h1>asd</h1>
+
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
+      <h1>asd</h1>
     </div>
   );
 };

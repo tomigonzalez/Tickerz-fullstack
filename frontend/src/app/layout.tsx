@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavBar from "@/components/NavBar";
-import SmoothScrollWrapper from "@/components/SmoothScrollWrapper";
+import SmoothScrollWrapper from "@/components/ui/SmoothScrollWrapper";
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,6 +33,7 @@ export default function RootLayout({
         <SmoothScrollWrapper>
           <NavBar />
           {children}
+          <Footer />
         </SmoothScrollWrapper>
       </body>
     </html>

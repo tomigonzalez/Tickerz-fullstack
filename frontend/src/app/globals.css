@@ -5,6 +5,8 @@
   --foreground: #171717;
   --primaryColor:#E9A319;
   --secondaryColor:#7C2303;
+  --tertiaryColor:#F14612;
+
 }
 
 
@@ -15,6 +17,7 @@
   --font-mono: var(--font-geist-mono);
    --color-primary: var(--primaryColor);
    --color-secondary: var(--secondaryColor);
+   --color-tertiary: var(--tertiaryColor);
 }
 
 @media (prefers-color-scheme: dark) {
