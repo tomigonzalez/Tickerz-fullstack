@@ -8,8 +8,7 @@ const NavBar = () => {
         <Image
           src="/img/logo.png"
           alt="Logo Tickerz"
-          width={100}
-          height={100}
+          fill
           className="p-2 object-contain"
         />
       </div>
